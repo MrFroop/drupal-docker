@@ -2,14 +2,14 @@
 #
 # VERSION               1
 # DOCKER-VERSION        1
-FROM    debian:wheezy
+FROM    debian:jessie
 
 MAINTAINER Stephan Maximilian Huber <stephan@factorial.io>
 
 RUN dpkg-divert --local --rename --add /sbin/initctl
 RUN ln -sf /bin/true /sbin/initctl
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get update --fix-missing && apt-get -y install git mysql-client mysql-server apache2 libapache2-mod-php5 pwgen python-setuptools vim-tiny php5-mysql php-apc php5-gd php5-curl php5-memcache memcached openssh-server vim curl graphviz make php5-dev php-pear php5-mcrypt imagemagick cron
+RUN export DEBIAN_FRONTEND=noninteractive && apt-get update --fix-missing && apt-get -y -q install git mysql-client mysql-server apache2 libapache2-mod-php5 pwgen python-setuptools vim-tiny php5-mysql php-apc php5-gd php5-curl php5-memcache memcached openssh-server vim curl graphviz make php5-dev php-pear php5-mcrypt imagemagick cron
 
 # composer and drush
 RUN curl -sS https://getcomposer.org/installer | php
@@ -31,7 +31,7 @@ RUN echo 'root:root' |chpasswd
 RUN sed -i "s/^bind-address/#bind-address/" /etc/mysql/my.cnf
 
 # configure apache
-RUN sed -i 's/AllowOverride None/AllowOverride All/' /etc/apache2/sites-available/default
+RUN sed -i 's/AllowOverride None/AllowOverride All/' /etc/apache2/sites-available/000-default.conf
 RUN a2enmod rewrite vhost_alias
 
 VOLUME ["/var/lib/mysql", "/var/www"]
