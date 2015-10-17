@@ -9,7 +9,7 @@ MAINTAINER Stephan Maximilian Huber <stephan@factorial.io>
 RUN dpkg-divert --local --rename --add /sbin/initctl
 RUN ln -sf /bin/true /sbin/initctl
 
-RUN export DEBIAN_FRONTEND=noninteractive && apt-get update --fix-missing && apt-get -y -q install git mysql-client mysql-server apache2 libapache2-mod-php5 pwgen python-setuptools vim-tiny php5-mysql php-apc php5-gd php5-curl php5-memcache memcached openssh-server vim curl graphviz make php5-dev php-pear php5-mcrypt imagemagick cron
+RUN export DEBIAN_FRONTEND=noninteractive && apt-get update --fix-missing && apt-get -y -q install git mysql-client apache2 libapache2-mod-php5 pwgen python-setuptools vim-tiny php5-mysql php-apc php5-gd php5-curl php5-memcache memcached openssh-server vim curl graphviz make php5-dev php-pear php5-mcrypt imagemagick
 
 # composer and drush
 RUN curl -sS https://getcomposer.org/installer | php
@@ -24,6 +24,7 @@ RUN echo "extension=apc.so" >> /etc/php5/apache2/php.ini
 
 # sshd
 RUN DEBIAN_FRONTEND=noninteractive apt-get autoclean
+RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 RUN mkdir /var/run/sshd
 RUN echo 'root:root' |chpasswd
 
@@ -34,7 +35,7 @@ RUN sed -i "s/^bind-address/#bind-address/" /etc/mysql/my.cnf
 RUN sed -i 's/AllowOverride None/AllowOverride All/' /etc/apache2/sites-available/000-default.conf
 RUN a2enmod rewrite vhost_alias
 
-VOLUME ["/var/lib/mysql", "/var/www"]
+VOLUME ["/var/www"]
 
 
 RUN easy_install supervisor
@@ -42,9 +43,7 @@ ADD ./start.sh /start.sh
 ADD ./foreground.sh /etc/apache2/foreground.sh
 ADD ./supervisord.conf /etc/supervisord.conf
 ADD ./php.ini /etc/php5/apache2/php.ini
-ADD ./mysql.cnf /etc/mysql/conf.d/mysql.cnf
 ADD ./xhprof.conf /etc/apache2/conf.d/xhprof.conf
-ADD ./security.conf /etc/apache2/conf.d/security.conf
 ADD ./phpsendmail /usr/local/bin/phpsendmail
 RUN chmod +x /usr/local/bin/phpsendmail
 RUN touch /var/log/mail_php.log
