@@ -1,6 +1,8 @@
 # dockerized drupal development box
+# includes apache, php, xhprof, imagemagick, sshd and drush
+# No mysql, use a dedicated mysql-docker-image and link the container.
 #
-# VERSION               1
+# VERSION               php-56
 # DOCKER-VERSION        1
 FROM    debian:jessie
 
