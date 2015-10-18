@@ -2,8 +2,8 @@
 set -x
 read pid cmd state ppid pgrp session tty_nr tpgid rest < /proc/self/stat
 trap "kill -TERM -$pgrp; exit" EXIT TERM KILL SIGKILL SIGTERM SIGQUIT
-echo ${WEB_ROOT}
-sed -i "s_/var/www/html_${WEB_ROOT}_g" /etc/apache2/sites-available/000-default.conf
+
+# sed -i "s_/var/www/html_${WEB_ROOT}_g" /etc/apache2/sites-available/000-default.conf
 
 source /etc/apache2/envvars
 apache2 -D FOREGROUND

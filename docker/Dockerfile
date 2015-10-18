@@ -30,11 +30,8 @@ RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/ss
 RUN mkdir /var/run/sshd
 RUN echo 'root:root' |chpasswd
 
-# Make mysql listen on the outside
-RUN sed -i "s/^bind-address/#bind-address/" /etc/mysql/my.cnf
-
 # configure apache
-RUN sed -i 's/AllowOverride None/AllowOverride All/' /etc/apache2/sites-available/000-default.conf
+RUN sed -i 's/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
 RUN a2enmod rewrite vhost_alias
 
 VOLUME ["/var/www"]
@@ -43,6 +40,7 @@ VOLUME ["/var/www"]
 RUN easy_install supervisor
 ADD ./start.sh /start.sh
 ADD ./foreground.sh /etc/apache2/foreground.sh
+ADD ./apache-vhost.conf /etc/apache2/sites-available/000-default.conf
 ADD ./supervisord.conf /etc/supervisord.conf
 ADD ./php.ini /etc/php5/apache2/php.ini
 ADD ./xhprof.conf /etc/apache2/conf.d/xhprof.conf
