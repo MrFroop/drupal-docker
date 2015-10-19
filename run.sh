@@ -144,5 +144,5 @@ fi
 
 
 # start our container
-${DOCKER} run -d --volumes-from ${DATA_CONTAINER_NAME}  -e PROJECT_NAME=${CONTAINER_NAME} --name ${CONTAINER_NAME} ${ARGUMENTS} -v ${ROOT_PATH}:/var/www ${IMAGE_NAME}
+${DOCKER} run -d --volumes-from ${DATA_CONTAINER_NAME}  -e PROJECT_NAME=${CONTAINER_NAME} --name ${CONTAINER_NAME} ${ARGUMENTS}:latest -v ${ROOT_PATH}:/var/www ${IMAGE_NAME}
 ${DOCKER} run --rm -v /usr/local/bin:/target jpetazzo/nsenter
