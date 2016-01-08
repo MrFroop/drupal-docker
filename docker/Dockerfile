@@ -16,6 +16,7 @@ RUN curl -sS https://getcomposer.org/installer | php
 RUN mv composer.phar /usr/local/bin/composer
 RUN /usr/local/bin/composer global require drush/drush:dev-master
 RUN sed -i '1i export PATH="/.composer/vendor/bin:$HOME/.composer/vendor/bin:$PATH"' /root/.bashrc
+RUN $HOME/.composer/vendor/bin/drush dl registry_rebuild --default-major=7
 
 # xhprof
 RUN pecl install xhprof-beta
@@ -32,7 +33,7 @@ RUN sed -i "s/^bind-address/#bind-address/" /etc/mysql/my.cnf
 
 # configure apache
 RUN sed -i 's/AllowOverride None/AllowOverride All/' /etc/apache2/sites-available/default
-RUN a2enmod rewrite vhost_alias
+RUN a2enmod rewrite vhost_alias headers
 
 VOLUME ["/var/lib/mysql", "/var/www"]
 
