@@ -27,6 +27,8 @@ RUN echo "extension=apc.so" >> /etc/php5/apache2/php.ini
 # sshd
 RUN DEBIAN_FRONTEND=noninteractive apt-get autoclean
 RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+RUN sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config
+RUN sed -ri 's/#UsePAM no/UsePAM no/g' /etc/ssh/sshd_config
 RUN mkdir /var/run/sshd
 RUN echo 'root:root' |chpasswd
 
