@@ -3,7 +3,7 @@
 # No mysql, use a dedicated mysql-docker-image and link the container.
 #
 # VERSION               php-56
-# DOCKER-VERSION        1
+# DOCKER-VERSION        2
 FROM    debian:jessie
 
 MAINTAINER Stephan Maximilian Huber <stephan@factorial.io>
