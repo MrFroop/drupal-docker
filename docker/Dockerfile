@@ -16,7 +16,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && apt-get update --fix-missing && apt
 # composer and drush
 RUN curl -sS https://getcomposer.org/installer | php
 RUN mv composer.phar /usr/local/bin/composer
-RUN /usr/local/bin/composer global require drush/drush:dev-master
+RUN /usr/local/bin/composer global require drush/drush:8.*
 RUN sed -i '1i export PATH="/.composer/vendor/bin:$HOME/.composer/vendor/bin:$PATH"' /root/.bashrc
 
 # xhprof
