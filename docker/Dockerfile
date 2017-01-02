@@ -2,7 +2,7 @@
 # includes apache, php, xhprof, imagemagick, sshd and drush
 # No mysql, use a dedicated mysql-docker-image and link the container.
 #
-# VERSION               php-56
+# VERSION               php-70
 # DOCKER-VERSION        2
 FROM    debian:jessie
 
@@ -11,19 +11,22 @@ MAINTAINER Stephan Maximilian Huber <stephan@factorial.io>
 RUN dpkg-divert --local --rename --add /sbin/initctl
 RUN ln -sf /bin/true /sbin/initctl
 
-RUN export DEBIAN_FRONTEND=noninteractive && apt-get update --fix-missing && apt-get -y -q install git mysql-client apache2 libapache2-mod-php5 pwgen python-setuptools vim-tiny php5-mysql php-apc php5-gd php5-curl php5-memcache memcached openssh-server vim curl graphviz make php5-dev php-pear php5-mcrypt imagemagick php5-redis
+RUN export debian_frontend=noninteractive && apt-get update --fix-missing && apt-get -y -q install git mysql-client wget
+
+# Prepare php7
+RUN echo 'deb http://packages.dotdeb.org jessie all' >> /etc/apt/sources.list
+RUN echo 'deb-src http://packages.dotdeb.org jessie all' >> /etc/apt/sources.list
+RUN /usr/bin/wget -qO - https://www.dotdeb.org/dotdeb.gpg | apt-key add -
+
+RUN export debian_frontend=noninteractive && apt-get update --fix-missing && apt-get -y -q install unzip apache2 pwgen python-setuptools vim-tiny openssh-server vim curl graphviz make imagemagick libapache2-mod-php7.0 php7.0-mysql php7.0-curl php7.0-memcache php7.0-mcrypt php7.0-redis php7.0-mbstring php7.0-gd php7.0-dom php7.0-xml
 
 # composer and drush
-RUN curl -sS https://getcomposer.org/installer | php
-RUN mv composer.phar /usr/local/bin/composer
-RUN /usr/local/bin/composer global require "hirak/prestissimo:^0.3"
-RUN /usr/local/bin/composer global require drush/drush:8.1.4
+run curl -ss https://getcomposer.org/installer | php
+run mv composer.phar /usr/local/bin/composer
+run /usr/local/bin/composer global require "hirak/prestissimo:^0.3"
+run /usr/local/bin/composer global require drush/drush:8.1.4
 RUN sed -i '1i export PATH="/.composer/vendor/bin:$HOME/.composer/vendor/bin:$PATH"' /root/.bashrc
 
-# xhprof
-RUN pecl install xhprof-beta
-
-RUN echo "extension=apc.so" >> /etc/php5/apache2/php.ini
 
 # sshd
 RUN DEBIAN_FRONTEND=noninteractive apt-get autoclean
