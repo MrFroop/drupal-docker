@@ -44,7 +44,7 @@ The script will create all necessary docker images and install a minimal drupal 
 
 ## XHProf-Support
 
-The docker-image install xhprof, if you want to use it with the devel module, use these settings:
+~~The docker-image install xhprof, if you want to use it with the devel module, use these settings~~
 
     XHProf-directory: /usr/share/php
     XHProf URL:       http://<host>/xhprof
@@ -52,3 +52,4 @@ The docker-image install xhprof, if you want to use it with the devel module, us
 ## Todo
 
 * phpmyadmin does not work
+* add xhprof again
