@@ -11,7 +11,7 @@ MAINTAINER Stephan Maximilian Huber <stephan@factorial.io>
 RUN dpkg-divert --local --rename --add /sbin/initctl
 RUN ln -sf /bin/true /sbin/initctl
 
-RUN export debian_frontend=noninteractive && apt-get update --fix-missing && apt-get -y -q install git mysql-client wget
+RUN export debian_frontend=noninteractive && apt-get update --fix-missing && apt-get -y -q install git mysql-client wget optipng jpegoptim
 
 # Prepare php7
 RUN echo 'deb http://packages.dotdeb.org jessie all' >> /etc/apt/sources.list
